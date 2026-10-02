@@ -11,10 +11,21 @@ st.title("🎂 Niver Mimi - Acompanhamento da Aniversáriante")
 
 st.subheader("Bem-vindo ao painel de acompanhamento da aniversariante Mimi! Aqui você pode visualizar e interagir com os dados relacionados aos aniversários.")
 
-df_dados = st.session_state['df_niver_mimi'] if 'df_niver_mimi' in st.session_state else pd.DataFrame()
+# Verifica se os dados já estão na sessão; se não estiverem, carrega
+if 'df_niver_mimi' not in st.session_state or st.session_state['df_niver_mimi'].empty:
+    try:
+        sheet_id = st.secrets["SHEET"]["SHEET_ID"]
+        with st.spinner("A carregar dados da planilha..."):
+            st.session_state['df_niver_mimi'] = load_data(sheet_id)
+            st.session_state['logged_in'] = True
+    except KeyError:
+        st.error("SHEET_ID não configurado nos secrets.")
+        st.stop()
 
-if df_dados.empty:    
-    st.warning("Dados não encontrados na sessão. Por favor, faça login novamente.")
+df_dados = st.session_state.get('df_niver_mimi', pd.DataFrame())
+
+if df_dados.empty:
+    st.warning("Dados não encontrados ou a planilha está vazia. Por favor, verifique a conexão com a planilha.")
     st.stop()
 
 aba1, aba2 = st.tabs(["📊 Visualização de Dados", "📈 Inclusão de Dados"])
