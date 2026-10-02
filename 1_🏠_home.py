@@ -11,7 +11,8 @@ st.title("🎂 Niver Mimi - Acompanhamento da Aniversáriante")
 
 st.subheader("Bem-vindo ao painel de acompanhamento da aniversariante Mimi! Aqui você pode visualizar e interagir com os dados relacionados aos aniversários.")
 
-df_dados = st.session_state['df_niver_mimi']
+df_dados = st.session_state['df_niver_mimi'] if 'df_niver_mimi' in st.session_state else pd.DataFrame()
+
 if df_dados.empty:    
     st.warning("Dados não encontrados na sessão. Por favor, faça login novamente.")
     st.stop()

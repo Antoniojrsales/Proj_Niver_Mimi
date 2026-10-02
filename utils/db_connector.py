@@ -32,7 +32,8 @@ def load_data(sheet_id: str, gid: str = "0") -> pd.DataFrame:
 df = load_data(SHEET_ID)
 
 if not df.empty:
+    st.session_state['logged_in'] = True
     st.session_state['df_niver_mimi'] = df
-    # st.session_state['logged_in'] = True  # se fizer sentido no seu fluxo
+    
 else:
     st.warning("Nenhum dado encontrado na planilha.")
